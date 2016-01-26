@@ -1,0 +1,26 @@
+{% extends "stupid_blog/base.html" %}
+{% load i18n thumbnail %}{% spaceless %}
+
+{% block content_blog %}
+<section class="blog-list">
+    {% for post in post_list %}
+        {% include "stupid_blog/includes/blog_item.html" with post=post %}
+    {% empty %}
+        <p class="blog-empty">{% trans "No article found." %}</p>
+    {% endfor %}
+    {% if is_paginated %}
+    <nav class="{% firstof css_grid instance.css_grid %} pagination">
+        {% if page_obj.has_previous %}
+            <a href="?{{ view.page_kwarg }}={{ page_obj.previous_page_number }}">&laquo; {% trans "previous" %}</a>
+        {% endif %}
+        <span class="current">
+            {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ paginator.num_pages }}
+        </span>
+        {% if page_obj.has_next %}
+            <a href="?{{ view.page_kwarg }}={{ page_obj.next_page_number }}">{% trans "next" %} &raquo;</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+</section>
+{% endblock %}
+{% endspaceless %}

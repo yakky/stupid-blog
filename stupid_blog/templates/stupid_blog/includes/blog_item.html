@@ -1,0 +1,13 @@
+{% load i18n thumbnail cms_tags %}
+
+<article id="post-{{ post.slug }}" class="post-item">
+    <header>
+        <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+    </header>
+    <div class="blog-lead">
+    {% render_model post "abstract" %}
+    </div>
+    <footer class="read-more">
+        <a href="{{ post.get_absolute_url }}">{% trans "read more" %} &raquo;</a>
+    </footer>
+</article>

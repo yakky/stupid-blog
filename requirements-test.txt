@@ -1,0 +1,4 @@
+-r requirements.txt
+djangocms-helper<1.0
+django-cms>=3.3.2,<3.4
+djangocms-text-ckeditor>=3.2.1
