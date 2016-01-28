@@ -30,9 +30,6 @@ urlpatterns = [
 urlpatterns += staticfiles_urlpatterns()
 
 urlpatterns += i18n_patterns(
-    url(r'^blog/', include('stupid_blog.urls')),
-)
-urlpatterns += i18n_patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('cms.urls')),
 )
