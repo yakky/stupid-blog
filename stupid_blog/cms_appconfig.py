@@ -7,6 +7,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from parler.models import TranslatableModel, TranslatedFields
 
+from .settings import get_setting
+
 
 # This is a plain model with inherited (from AppHookConfig) appdata field
 class BlogConfig(TranslatableModel, AppHookConfig):
@@ -37,7 +39,7 @@ class BlogConfig(TranslatableModel, AppHookConfig):
 # e.g: post.app_config.paginate_by
 class BlogConfigForm(AppDataForm):
     paginate_by = forms.IntegerField(
-        label=_('Paginate size'), required=False, initial=50,
+        label=_('Paginate size'), required=False, initial=get_setting('PAGINATION'),
         help_text=_('When paginating list views, how many articles per page?')
     )
 setup_config(BlogConfigForm, BlogConfig)

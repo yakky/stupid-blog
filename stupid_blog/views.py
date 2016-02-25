@@ -7,8 +7,8 @@ from django.views.generic import DetailView, ListView
 
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
 
-
 from .models import Post
+from .settings import get_setting
 
 
 class PostListView(AppConfigMixin, ViewUrlMixin, ListView):
@@ -36,7 +36,7 @@ class PostListView(AppConfigMixin, ViewUrlMixin, ListView):
     def get_paginate_by(self, queryset):
         # self.config is added automatically by AppConfigMixin and points to the BlogConfig
         # instance
-        return self.config.paginate_by or 10
+        return self.config.paginate_by or get_setting('PAGINATION')
 
 
 # TranslatableSlugMixin is a parler magic mixin that automatically
