@@ -27,6 +27,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableA
         return (
             (None, {'fields': (
                 'title', 'slug', 'publish', 'app_config',
+                'image',
                 'date_published',
                 'abstract'
             )}),

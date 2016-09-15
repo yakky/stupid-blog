@@ -76,4 +76,5 @@ class PostDetailView(AppConfigMixin, TranslatableSlugMixin, ViewUrlMixin, Detail
         context = super(PostDetailView, self).get_context_data(**kwargs)
         # This allows to communicate to the toolbar the opened post
         setattr(self.request, get_setting('CURRENT_POST_IDENTIFIER'), self.get_object())
+        context['meta'] = self.get_object().as_meta(self.request)
         return context

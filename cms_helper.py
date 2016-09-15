@@ -12,6 +12,7 @@ HELPER_SETTINGS = dict(
     INSTALLED_APPS=[
         'filer',
         'parler',
+        'meta',
         'easy_thumbnails',
         'djangocms_text_ckeditor',
         'cmsplugin_filer_image',
@@ -63,6 +64,12 @@ HELPER_SETTINGS = dict(
     ),
     FILE_UPLOAD_TEMP_DIR=mkdtemp(),
     SITE_ID=1,
+    # Add sane defaults
+    META_USE_SITES=True,
+    META_SITE_PROTOCOL='http',
+    META_USE_OG_PROPERTIES=True,
+    META_USE_GOOGLEPLUS_PROPERTIES=True,
+    META_USE_TWITTER_PROPERTIES=True,
 )
 
 

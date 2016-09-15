@@ -1,7 +1,7 @@
 {% extends "stupid_blog/base.html" %}
 {% load i18n thumbnail cms_tags %}
 
-{% block title %}{{ post.get_title }}{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block content_blog %}
 <article id="post-{{ post.slug }}" class="post-item post-detail">
