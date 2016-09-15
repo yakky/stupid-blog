@@ -8,6 +8,9 @@
     <header>
         <h2>{% render_model post "title" %}</h2>
     </header>
+    {# second "abstract" is the field that's editable when double clicking on the field; accepts multiple fieldnames #}
+    {# "safe" allows html content in abstract field: check security implications according to your threat model #}
+    <div class="blog-abstract">{% render_model post "abstract" "title,abstract" "" "safe"  %}</div>
     <div class="blog-content">{% render_placeholder post.content %}</div>
 </article>
 {% endblock content_blog %}

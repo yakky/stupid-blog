@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from aldryn_apphooks_config.admin import BaseAppHookConfig
-from cms.admin.placeholderadmin import PlaceholderAdminMixin
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin, PlaceholderAdminMixin
 from django.conf.urls import url
 from django.contrib import admin
 from django.core.urlresolvers import reverse
@@ -14,10 +14,13 @@ from stupid_blog.cms_appconfig import BlogConfig
 from stupid_blog.models import Post
 
 
-class PostAdmin(PlaceholderAdminMixin, TranslatableAdmin):
+# Add FrontendEditableAdminMixin
+class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableAdmin):
     model = Post
     list_display = ('title', 'publish', 'date_published')
     date_hierarchy = 'date_published'
+    # declare the fields you want editable by render_model
+    frontend_editable_fields = ('title', 'abstract')
 
     def get_fieldsets(self, request, obj=None):
         # This is not required, but reminds that parler does not work with ``fieldsets`` attribute
