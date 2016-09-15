@@ -2,6 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from aldryn_apphooks_config.admin import BaseAppHookConfig
+from cms.admin.placeholderadmin import PlaceholderAdminMixin
 from django.conf.urls import url
 from django.contrib import admin
 from django.core.urlresolvers import reverse
@@ -13,7 +14,7 @@ from stupid_blog.cms_appconfig import BlogConfig
 from stupid_blog.models import Post
 
 
-class PostAdmin(TranslatableAdmin):
+class PostAdmin(PlaceholderAdminMixin, TranslatableAdmin):
     model = Post
     list_display = ('title', 'publish', 'date_published')
     date_hierarchy = 'date_published'

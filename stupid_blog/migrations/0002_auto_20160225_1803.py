@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('type', models.CharField(max_length=100, verbose_name='type')),
                 ('namespace', models.CharField(default=None, max_length=100, unique=True, verbose_name='instance namespace')),
-                ('app_data', app_data.fields.AppDataField(default=b'{}', editable=False)),
+                ('app_data', app_data.fields.AppDataField(default='{}', editable=False)),
             ],
             options={
                 'verbose_name': 'blog config',

@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_apphooks_config.managers.parler import AppHookConfigTranslatableQueryset
+from cms.models import PlaceholderField
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
@@ -49,6 +50,9 @@ class Post(TranslatableModel):
     app_config = AppHookConfigField(
         BlogConfig, null=True, verbose_name=_('app. config')
     )
+    # when adding the placeholder field you have to save your models again
+    # to make the placeholder field discoverable
+    content = PlaceholderField('content')
 
     objects = PostManager()
 
