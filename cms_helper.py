@@ -11,6 +11,7 @@ HELPER_SETTINGS = dict(
     ROOT_URLCONF='tests.test_utils.urls',
     INSTALLED_APPS=[
         'filer',
+        'parler',
         'easy_thumbnails',
         'djangocms_text_ckeditor',
         'cmsplugin_filer_image',

@@ -6,20 +6,43 @@ from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import slugify
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from djangocms_text_ckeditor.fields import HTMLField
+from parler.models import (
+    TranslatableModel, TranslatedFields
+)
+from parler.managers import TranslatableQuerySet
+
+
+# This is not required, but it's always nicer to have a custom queryset
+# when you deal with publish fields (or filtering fields in general)
+class PostQueryset(TranslatableQuerySet):
+
+    def published(self):
+        return self.filter(publish=True, date_published__lte=now())
+
+    def iacopos(self):
+        return self.filter(author='iacopo')
+
+
+# Do you know this Django 1.8 feature?
+PostManager = PostQueryset.as_manager
 
 
 @python_2_unicode_compatible
-class Post(models.Model):
-    title = models.CharField(_('title'), max_length=1000)
-    slug = models.SlugField(_('slug'))
+class Post(TranslatableModel):
+    translations = TranslatedFields(
+        title=models.CharField(_('title'), max_length=1000),
+        slug=models.SlugField(_('slug'), blank=True, default=''),
+        abstract=HTMLField(_('abstract')),
+    )
     publish = models.BooleanField(_('publish'), default=False)
-    abstract = HTMLField(_('abstract'))
-
     date_created = models.DateTimeField(_('created'), auto_now_add=True)
     date_modified = models.DateTimeField(_('last modified'), auto_now=True)
     date_published = models.DateTimeField(_('published since'), default=timezone.now)
+
+    objects = PostManager()
 
     class Meta:
         verbose_name = _('blog article')

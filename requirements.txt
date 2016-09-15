@@ -1,2 +1,4 @@
 django-filer>=1.2,<1.3
 cmsplugin-filer>=1.1,<1.2
+django-parler<1.7
+pytz
