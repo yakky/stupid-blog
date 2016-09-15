@@ -13,5 +13,7 @@ def get_setting(config):
         'AUTO_NAMESPACE': getattr(settings, 'STUPID_AUTO_NAMESPACE', 'blog'),
         'AUTO_APP_TITLE': getattr(settings, 'STUPID_AUTO_APP_TITLE', 'Blog'),
         'DEFAULT_OBJECT_NAME': getattr(settings, 'STUPID_DEFAULT_OBJECT_NAME', 'Post'),
+        'CURRENT_POST_IDENTIFIER': getattr(settings, 'STUPID_CURRENT_POST_IDENTIFIER', 'stupid_post_current_post'),
+        'CURRENT_NAMESPACE': getattr(settings, 'STUPID_CURRENT_NAMESPACE', 'stupid_post_current_config'),
     }
     return defaults[config]

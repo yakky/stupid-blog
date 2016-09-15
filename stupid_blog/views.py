@@ -31,6 +31,8 @@ class PostListView(AppConfigMixin, ViewUrlMixin, ListView):
             language_code=language
         )
         queryset = queryset.published()
+        # This allows to communicate to the toolbar the current namespace
+        setattr(self.request, get_setting('CURRENT_NAMESPACE'), self.config)
         return queryset
 
     def get_paginate_by(self, queryset):
@@ -62,4 +64,12 @@ class PostDetailView(AppConfigMixin, TranslatableSlugMixin, ViewUrlMixin, Detail
             language_code=language
         )
         queryset = queryset.published()
+        # This allows to communicate to the toolbar the current namespace
+        setattr(self.request, get_setting('CURRENT_NAMESPACE'), self.config)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+        # This allows to communicate to the toolbar the opened post
+        setattr(self.request, get_setting('CURRENT_POST_IDENTIFIER'), self.get_object())
+        return context
