@@ -30,7 +30,9 @@ class PostListView(AppConfigMixin, ViewUrlMixin, ListView):
         ).active_translations(
             language_code=language
         )
-        queryset = queryset.published()
+        # This allows editors to see unpublished content for front-end editing
+        if not getattr(self.request, 'toolbar', False) or not self.request.toolbar.edit_mode:
+            queryset = queryset.published()
         # This allows to communicate to the toolbar the current namespace
         setattr(self.request, get_setting('CURRENT_NAMESPACE'), self.config)
         return queryset
@@ -63,7 +65,9 @@ class PostDetailView(AppConfigMixin, TranslatableSlugMixin, ViewUrlMixin, Detail
         ).active_translations(
             language_code=language
         )
-        queryset = queryset.published()
+        # This allows editors to see unpublished content for front-end editing
+        if not getattr(self.request, 'toolbar', False) or not self.request.toolbar.edit_mode:
+            queryset = queryset.published()
         # This allows to communicate to the toolbar the current namespace
         setattr(self.request, get_setting('CURRENT_NAMESPACE'), self.config)
         return queryset
