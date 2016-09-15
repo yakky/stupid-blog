@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from aldryn_apphooks_config.mixins import AppConfigMixin
 from django.utils.translation import get_language
 from django.views.generic import DetailView, ListView
 
@@ -10,7 +11,7 @@ from parler.views import TranslatableSlugMixin, ViewUrlMixin
 from .models import Post
 
 
-class PostListView(ViewUrlMixin, ListView):
+class PostListView(AppConfigMixin, ViewUrlMixin, ListView):
     model = Post
     context_object_name = 'post_list'
     template_name = 'stupid_blog/post_list.html'
@@ -21,18 +22,27 @@ class PostListView(ViewUrlMixin, ListView):
 
     def get_queryset(self):
         language = get_language()
+        # We need to start filtering on namespace to pick the 'right' models
+        queryset = self.model._default_manager.namespace(
+            self.namespace
         # This is the standard parler way to pick the ``correct`` languages
         # with takes fallback mechanism into account
-        queryset = self.model._default_manager.active_translations(
+        ).active_translations(
             language_code=language
         )
         queryset = queryset.published()
         return queryset
 
+    def get_paginate_by(self, queryset):
+        # self.config is added automatically by AppConfigMixin and points to the BlogConfig
+        # instance
+        return self.config.paginate_by or 10
+
 
 # TranslatableSlugMixin is a parler magic mixin that automatically
 # matches ``slug`` with ``translation__slug``
-class PostDetailView(TranslatableSlugMixin, ViewUrlMixin, DetailView):
+# AppConfigMixin handles the namespace magic
+class PostDetailView(AppConfigMixin, TranslatableSlugMixin, ViewUrlMixin, DetailView):
     model = Post
     context_object_name = 'post'
     template_name = 'stupid_blog/post_detail.html'
@@ -43,9 +53,12 @@ class PostDetailView(TranslatableSlugMixin, ViewUrlMixin, DetailView):
 
     def get_queryset(self):
         language = get_language()
+        # We need to start filtering on namespace to pick the 'right' models
+        queryset = self.model._default_manager.namespace(
+            self.namespace
         # This is the standard parler way to pick the ``correct`` languages
         # with takes fallback mechanism into account
-        queryset = self.model._default_manager.active_translations(
+        ).active_translations(
             language_code=language
         )
         queryset = queryset.published()

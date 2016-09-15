@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from aldryn_apphooks_config.fields import AppHookConfigField
+from aldryn_apphooks_config.managers.parler import AppHookConfigTranslatableQueryset
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
@@ -12,12 +14,15 @@ from djangocms_text_ckeditor.fields import HTMLField
 from parler.models import (
     TranslatableModel, TranslatedFields
 )
-from parler.managers import TranslatableQuerySet
+
+from stupid_blog.cms_appconfig import BlogConfig
 
 
 # This is not required, but it's always nicer to have a custom queryset
 # when you deal with publish fields (or filtering fields in general)
-class PostQueryset(TranslatableQuerySet):
+# This new superclass it's just a convenient shortcut that adds ``namespace`` filtering
+# method
+class PostQueryset(AppHookConfigTranslatableQueryset):
 
     def published(self):
         return self.filter(publish=True, date_published__lte=now())
@@ -41,6 +46,9 @@ class Post(TranslatableModel):
     date_created = models.DateTimeField(_('created'), auto_now_add=True)
     date_modified = models.DateTimeField(_('last modified'), auto_now=True)
     date_published = models.DateTimeField(_('published since'), default=timezone.now)
+    app_config = AppHookConfigField(
+        BlogConfig, null=True, verbose_name=_('app. config')
+    )
 
     objects = PostManager()
 
@@ -54,7 +62,7 @@ class Post(TranslatableModel):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post-detail', kwargs={'slug': self.slug})
+        return reverse('%s:post-detail' % self.app_config.namespace, kwargs={'slug': self.safe_translation_getter('slug')})
 
     def save(self, *args, **kwargs):
         if not self.slug and self.title:
